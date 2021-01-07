@@ -1,8 +1,8 @@
 class Dom {
     constructor(selector) {
         this.$el = typeof selector === 'string'
-        ? document.querySelector(selector)
-        : selector
+            ? document.querySelector(selector)
+            : selector
     }
 
     html(html) {
@@ -26,19 +26,44 @@ class Dom {
         this.$el.removeEventListener(eventType, callback)
     }
 
-    append(html) {
-        if (html instanceof Dom) {
-            html = html.$el
+    append(node) {
+        if (node instanceof Dom) {
+            node = node.$el
         }
-        this.$el.append(html)
+
+        if (Element.prototype.append) {
+            this.$el.append(node)
+        } else {
+            this.$el.appendChild(node)
+        }
+
         return this
+    }
+
+    get data() {
+        return this.$el.dataset
+    }
+
+    closest(selector) {
+        return $(this.$el.closest(selector))
+    }
+
+    getCoords() {
+        return this.$el.getBoundingClientRect()
+    }
+
+    findAll(selector) {
+        return this.$el.querySelectorAll(selector)
+    }
+
+    css(styles = {}) {
+        return Object.assign(this.$el.style, styles), this
     }
 }
 
 export function $(selector) {
     return new Dom(selector)
 }
-
 
 $.create = (tagName, classes = '') => {
     const el = document.createElement(tagName)
