@@ -23,7 +23,6 @@ const jsLoaders = () => {
     if (isDev) {
         loaders.push('eslint-loader')
     }
-    console.log(path.resolve(__dirname, 'dist'))
     return loaders
 }
 
